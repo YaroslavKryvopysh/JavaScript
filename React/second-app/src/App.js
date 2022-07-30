@@ -1,55 +1,32 @@
-import { React } from 'react';
-import { useState } from 'react';
-import ClassCounter from './components/ClassCounter';
-import Counter from './components/Counter';
-import PostItem from './components/PostItem';
-import PostList from './components/PostList';
-import MyButton from './components/UI/button/MyButton';
-import MyInput from './components/UI/input/MyInput';
-import './styles/App.css'
+import { React, useState, useEffect } from 'react';
+import  { BrowserRouter} from 'react-router-dom';
+import './styles/App.css';
+import Navbar from './components/UI/Navbar/Navbar';
+import AppRouter from './components/AppRouter';
+import { AuthContext } from './context';
+
+
 
 
 function App() {
-  const [posts, setPosts] = useState([
-    { id: 1, title: 'Javascript', body: 'Description' },
-    { id: 2, title: 'Javascript 2', body: 'Description' },
-    { id: 3, title: 'Javascript 3', body: 'Description' },    
-  ])
+  const [isAuth, setIsAuth] = useState(false);
 
-  const [title, setTitle]=useState('')
-const [body, setBody]=useState('')
-
-
-  const addNewPost = (e) => {
-    e.preventDefault()
-    const newPost = {
-      id: Date.now(),
-      title,
-      body
+  useEffect(() => {
+    if (localStorage.getItem('auth')) {
+      setIsAuth(true)
     }
-    setPosts([...posts, newPost])
-}
-
+  },[])
   return (
-    <div className="App">
-      <form>
-        <MyInput
-          value={title}
-          onChange={e=>setTitle(e.target.volue)}
-          type='text'
-          placeholder='Название поста'
-        />
-        <MyInput
-          value={body}
-          onChange={e=>setBody(e.target.volue)}
-          type='text'
-          placeholder='Описание поста'
-        />
-        <MyButton onClick={addNewPost}>Создать пост</MyButton>
-      </form>
-      <PostList posts={posts} title='Посты про JS' />
-    </div>
-  );
+    <AuthContext.Provider value={{
+      isAuth,
+      setIsAuth
+    }} >
+      <BrowserRouter>
+        <Navbar />
+        <AppRouter/>
+      </BrowserRouter>
+    </AuthContext.Provider>
+  )
 }
 
 export default App;

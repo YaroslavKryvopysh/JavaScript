@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from '@testing-library/react';
+
 
 
 class ClassCounter extends React.Component{
